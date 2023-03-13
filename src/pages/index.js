@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ImageListType } from "react-images-uploading";
 import supabase from "./utils/supabaseClient";
 
 export default function Home() {
@@ -60,7 +59,11 @@ export default function Home() {
           .select();
         if (error) throw error;
         console.log("data: ", data);
-        if (links) setLinks([...data, ...links]);
+        if (links) {
+          setLinks([...data, ...links])
+          setTitle("")
+          setUrl("")
+        };
       }
     } catch (error) {
       console.error(error);
@@ -85,55 +88,11 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex flex-col w-full justify-center items-center mt-4">
-        {isAuthenticated && (
-          <>
-            <div className="mt-4">
-              <input
-                type="text"
-                id="title"
-                className="border border-gray-300 rounded-md"
-                placeholder="Un lien random"
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className="mt-4">
-              <input
-                type="text"
-                id="url"
-                className="border border-gray-300 rounded-md"
-                placeholder="google.com"
-                onChange={(e) => setUrl(e.target.value)}
-              />
-            </div>
-            <button
-              className="border-2 border-black rounded-md mt-4 px-4 hover:bg-black hover:text-white"
-              onClick={addNewLInk}
-            >
-              Ajouter un nouveau lien
-            </button>
-          </>
-        )}
-        {links?.map((link, i) => (
-          <div key={i} className="flex flex-row items-center mt-5">
-            <div
-              className="rounded-md bg-blue-400 hover:bg-blue-100 w-60 p-2 text-slate-100 hover:text-slate-900 font-semibold cursor-pointer shadow-xl"
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.href = link.url;
-              }}
-            >
-              <p>{link.title}</p>
-            </div>
-            <div
-              onClick={deleteLink}
-              className="flex flex-row justify-center items-center w-fit h-fit ml-2 p-2 border border-black rounded-full cursor-pointer"
-              id={i}
-            >
-              X
-            </div>
-          </div>
-        ))}
+      <h1 className="text-center" >Bienvenue</h1>
+      <div  className="flex flex-row justify-between w-fit mx-auto p-4 mt-4">
+      <button onClick={() => router.push("/signup")} className="border border-slate-500 rounded-lg p-2" >Inxcription</button>
+      <button onClick={() => router.push("/login")} className="border border-slate-500 rounded-lg p-2" >Connexion</button>
+      <button onClick={() => router.push("/dashboard")} className="border border-slate-500 rounded-lg p-2" >Accéder en tant qu'invité</button>
       </div>
     </>
   );

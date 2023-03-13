@@ -13,7 +13,7 @@ const Signup = () => {
         const resp = await supabase.auth.signUp({ email, password });
         if (resp.error) throw resp.error;
         const userId = resp.data.user?.id;
-        router.push("/");
+        router.push("/dashboard");
       }
     } catch (error) {
       console.error(error);

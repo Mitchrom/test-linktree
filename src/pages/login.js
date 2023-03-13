@@ -16,7 +16,7 @@ const Login = () => {
         });
         if (resp.error) throw resp.error;
         const userId = resp.data.user?.id;
-        router.push("/");
+        router.push("/dashboard");
       }
     } catch (error) {
       console.error(error);
