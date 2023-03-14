@@ -73,7 +73,7 @@ export default function Home() {
           })
           .select();
         if (error) throw error;
-        console.log("data: ", data);
+        // console.log("data: ", data);
         if (links) {
           setLinks([...data, ...links])
           setTitle("")
@@ -166,7 +166,7 @@ export default function Home() {
           </div>
         ))}
       </div>
-      {isOpen ? <UpdateModal toUpdate={toUpdate} setToUpdate={setToUpdate} isOpen={isOpen} setIsOpen={setIsOpen} /> : null}
+      {isOpen ? <UpdateModal links={links} setLinks={setLinks} toUpdate={toUpdate} setToUpdate={setToUpdate} isOpen={isOpen} setIsOpen={setIsOpen} /> : null}
     </>
   );
 }

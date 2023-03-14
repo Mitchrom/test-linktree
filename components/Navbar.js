@@ -5,6 +5,7 @@ import { styles } from "@/styles/style";
 
 const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isUserNameSetted, setIsUserNameSetted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [newUserName, setNewUserName] = useState("")
   // const [user, setUser] = useState({});

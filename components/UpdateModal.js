@@ -2,28 +2,41 @@ import React, { useEffect } from "react";
 import { styles } from "@/styles/style";
 import supabase from "@/pages/utils/supabaseClient";
 
-const UpdateModal = ({ toUpdate, setToUpdate, isOpen, setIsOpen }) => {
-console.log(toUpdate);
+const UpdateModal = ({
+  links,
+  setLinks,
+  toUpdate,
+  setToUpdate,
+  isOpen,
+  setIsOpen,
+}) => {
 
   const updateLink = async () => {
+    let interlude
+    console.log(links);
+    console.log(toUpdate);
     try {
       const { data, error } = await supabase
         .from("links")
         .update({ title: toUpdate.title, url: toUpdate.url })
         .match({ id: toUpdate.id });
       if (error) {
-        console.error(error);
-        return null;
-      }
-      return data;
+          console.error(error);
+          return null;
+        }
+        let interlude = links.filter((ele) => ele.id !== toUpdate.id)
+        interlude = [...interlude, toUpdate]
+        console.log(interlude);
+        setLinks(interlude)
+        setIsOpen(false)
+        return data;
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className={`${styles.modal}`}>
-      <div onClick={() => setIsOpen(!isOpen)}>supp</div>
+    <div className={`${styles.modal} flex flex-col items-center`}>
       <div className="mt-4">
         <input
           type="text"
@@ -44,15 +57,15 @@ console.log(toUpdate);
           onChange={(e) => setToUpdate({ ...toUpdate, url: e.target.value })}
         />
       </div>
-      <button
-        className="border-2 border-black rounded-md mt-4 px-4 hover:bg-black hover:text-white"
-        onClick={updateLink}
-      >
-        Modifier lien
-      </button>
-
-      {/* <p>{toUpdate.title}</p>
-            <p>{toUpdate.url}</p> */}
+      <div>
+        <button className={`${styles.button}`} onClick={() => setIsOpen(!isOpen)}>Fermer</button>
+        <button
+            className={`${styles.button}`}
+            onClick={updateLink}
+        >
+            Modifier lien
+        </button>
+      </div>
     </div>
   );
 };
