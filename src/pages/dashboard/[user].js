@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 import Navbar from "../../../components/Navbar";
 import UpdateModal from "../../../components/UpdateModal";
 import supabase from "../utils/supabaseClient";
+import { styles } from "@/styles/style";
+import createTableElement from "../crud/createElement";
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
+  const [forTest, setForTest] = useState({})
   const [links, setLinks] = useState([]);
   const [isOpen, setIsOpen] = useState("")
   const [toUpdate, setToUpdate] = useState({})
@@ -84,6 +87,36 @@ export default function Home() {
     }
   };
 
+  //TEST ajouter un nouveau lien dans la bdd
+  const testCreate = async () => {
+    if (title && url && userId) {
+      //mettre les infos souhaitées dans un state
+      let interlude = {
+        title,
+        url,
+        user_id: userId
+      }
+      //voilà
+      setForTest({...interlude})
+      console.log(forTest);
+      //appel du module
+      //ne pas oublier de mettre direct le nom de la table en premier paramètre
+      //le second argument = le state contenant les infos à push
+      const { data, error } = await createTableElement("links", {title, url, user_id: userId})
+      console.log(data);
+      //dans le cadre de ce projet, récupérer tous les liens dans un autre state
+      //et l'appreler ici
+      //ici on garde le state links
+      if (links) {
+        setLinks([data, ...links])
+        setTitle("")
+        setUrl("")
+      };
+      console.log(links);
+    } else alert("vérifiez que vous êtes connecté et que vous avez bien rempli les deux champs")
+  }
+
+
   //supprimer lien de la bdd
   const deleteLink = async (e) => {
     let id = parseFloat(e.target.id.split("-")[1])
@@ -133,6 +166,7 @@ export default function Home() {
             >
               Ajouter un nouveau lien
             </button>
+            <button onClick={testCreate} className={`${styles.button}`}>Test module CRUD</button>
           </>
         )}
         {links?.map((link, i) => (
