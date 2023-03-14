@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import registerWithEmail from "./auth/signup";
 import supabase from "./utils/supabaseClient";
 
 const Signup = () => {
@@ -19,6 +20,12 @@ const Signup = () => {
       console.error(error);
     }
   };
+
+  const handleSignUp = async () => {
+    const { data, error } = await registerWithEmail(email, password)
+    if (error) console.error(error);
+    if (!data.error) router.push('/dashboard')
+  }
 
   return (
     <div>
@@ -48,7 +55,7 @@ const Signup = () => {
         <div className="w-fit mx-auto">
           <button
             className="border border-black rounded-lg p-1"
-            onClick={signUpWithEmail}
+            onClick={handleSignUp}
           >
             Inscription
           </button>

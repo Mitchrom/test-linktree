@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import supabase from "@/pages/utils/supabaseClient";
 import { useRouter } from "next/router";
 import { styles } from "@/styles/style";
+import logOut from "@/pages/auth/logout";
 
 const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,10 +28,10 @@ const Navbar = () => {
     getUser();
   }, []);
 
+  //fonction logout
+  //destructurer data au lieu de error parce que sinon il y a une erreur
   const logout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-    else window.location.href = "/";
+    const { data } = await logOut()
   };
 
   return (
@@ -52,8 +53,8 @@ const Navbar = () => {
         <div className="flex flex-col items-center" >
           <input type="text" value={newUserName} onChange={(e) => setNewUserName(e.target.value)} className={`${styles.input} w-fit mt-4`} />
           <div className="flex flex-row" >
-            <buttton onClick={() => setIsOpen(!isOpen)} className={`${styles.button} w-fit mt-4`}>Valider</buttton>
-            <buttton onClick={() => setNewUserName("")} className={`${styles.button} w-fit mt-4`}>Effacer</buttton>
+            <button onClick={() => setIsOpen(!isOpen)} className={`${styles.button} w-fit mt-4`}>Valider</button>
+            <button onClick={() => setNewUserName("")} className={`${styles.button} w-fit mt-4`}>Effacer</button>
           </div>
         </div>
       </div>

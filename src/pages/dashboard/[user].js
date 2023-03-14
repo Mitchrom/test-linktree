@@ -53,7 +53,7 @@ export default function Home() {
     if (userId) getLinks();
   }, [userId]);
 
-  //récupérer les infos du la ligne à modifier
+  //récupérer les infos de la ligne à modifier
   const getLink = (e) => {
     let interlude = parseFloat(e.target.id.split("-")[1])
     setToUpdate({...links[interlude]})
@@ -73,7 +73,6 @@ export default function Home() {
           })
           .select();
         if (error) throw error;
-        // console.log("data: ", data);
         if (links) {
           setLinks([...data, ...links])
           setTitle("")
