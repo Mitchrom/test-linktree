@@ -5,13 +5,13 @@ import UpdateModal from "../../../components/UpdateModal";
 import supabase from "../utils/supabaseClient";
 import { styles } from "@/styles/style";
 import createTableElement from "../crud/createElement";
+import deleteTableElement from "../crud/deleteElement";
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
-  const [forTest, setForTest] = useState({})
   const [links, setLinks] = useState([]);
   const [isOpen, setIsOpen] = useState("")
   const [toUpdate, setToUpdate] = useState({})
@@ -90,15 +90,6 @@ export default function Home() {
   //TEST ajouter un nouveau lien dans la bdd
   const testCreate = async () => {
     if (title && url && userId) {
-      //mettre les infos souhaitées dans un state
-      let interlude = {
-        title,
-        url,
-        user_id: userId
-      }
-      //voilà
-      setForTest({...interlude})
-      console.log(forTest);
       //appel du module
       //ne pas oublier de mettre direct le nom de la table en premier paramètre
       //le second argument = le state contenant les infos à push
@@ -133,6 +124,20 @@ export default function Home() {
       console.error(error);
     }
   };
+
+  //TEST supprimer lien de la bdd
+  const testDelete = async (e) => {
+    //récupérer l'id fourni durant le map
+    let id = parseFloat(e.target.id.split("-")[1])
+
+    //premier argument = nom de la table
+    //deuxième argument = on récupère dans le state links l'id de l'élément que l'on souhaite supp
+      //cela servira de "tri" (si on peut appeler ça comme ça) via la fonction eq() fournie par supabase-js
+    const { data, error } = await deleteTableElement("links", links[id].id)
+    // retirer l'élément du state pour synchroniser l'affichage
+    setLinks(links.filter((ele) => ele !== links[id]));
+  }
+
 
   return (
     <>
@@ -187,6 +192,13 @@ export default function Home() {
                 id={`delete-${i}`}
               >
                 X
+              </div>
+              <div
+                onClick={testDelete}
+                className="flex flex-row justify-center items-center w-fit h-fit ml-2 p-2 border border-black rounded-full cursor-pointer"
+                id={`delete-${i}`}
+              >
+                XXX
               </div>
               <div
                 onClick={getLink} 
