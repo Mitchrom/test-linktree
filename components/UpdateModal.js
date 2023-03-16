@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { styles } from "@/styles/style";
 import supabase from "@/pages/utils/supabaseClient";
+import updateTableElement from "@/pages/crud/updateElement";
 
 const UpdateModal = ({
   links,
@@ -10,29 +11,39 @@ const UpdateModal = ({
   isOpen,
   setIsOpen,
 }) => {
-
   const updateLink = async () => {
-    let interlude
-    console.log(links);
-    console.log(toUpdate);
+    let interlude;
     try {
       const { data, error } = await supabase
         .from("links")
         .update({ title: toUpdate.title, url: toUpdate.url })
         .match({ id: toUpdate.id });
       if (error) {
-          console.error(error);
-          return null;
-        }
-        let interlude = links.filter((ele) => ele.id !== toUpdate.id)
-        interlude = [...interlude, toUpdate]
-        console.log(interlude);
-        setLinks(interlude)
-        setIsOpen(false)
-        return data;
+        console.error(error);
+        return null;
+      }
+      interlude = links.filter((ele) => ele.id !== toUpdate.id);
+      interlude = [...interlude, toUpdate];
+      setLinks(interlude);
+      setIsOpen(false);
+      return data;
     } catch (error) {
       console.error(error);
     }
+  };
+
+  //fct pour mettre à jour les éléments
+  const testUpdate = async () => {
+    await updateTableElement(
+      "links",
+      { title: toUpdate.title, url: toUpdate.url }, //possible de stocker les deux objets dans des variables avant de les mettre en paramètres
+      { id: toUpdate.id } //ça dépend de chacun, pour l'exemple je laisse comme ça
+    );
+
+    let interlude = links.filter((ele) => ele.id !== toUpdate.id);
+    interlude = [...interlude, toUpdate];
+    setLinks(interlude);
+    setIsOpen(false);
   };
 
   return (
@@ -58,12 +69,17 @@ const UpdateModal = ({
         />
       </div>
       <div>
-        <button className={`${styles.button}`} onClick={() => setIsOpen(!isOpen)}>Fermer</button>
         <button
-            className={`${styles.button}`}
-            onClick={updateLink}
+          className={`${styles.button}`}
+          onClick={() => setIsOpen(!isOpen)}
         >
-            Modifier lien
+          Fermer
+        </button>
+        <button className={`${styles.button}`} onClick={updateLink}>
+          Modifier lien
+        </button>
+        <button className={`${styles.button}`} onClick={testUpdate}>
+          Test module CRUD
         </button>
       </div>
     </div>

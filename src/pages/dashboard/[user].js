@@ -13,8 +13,8 @@ export default function Home() {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [links, setLinks] = useState([]);
-  const [isOpen, setIsOpen] = useState("")
-  const [toUpdate, setToUpdate] = useState({})
+  const [isOpen, setIsOpen] = useState("");
+  const [toUpdate, setToUpdate] = useState({});
   const router = useRouter();
 
   //récup infos user depuis router.asPath
@@ -45,8 +45,8 @@ export default function Home() {
           .select("id, title, url")
           .eq("user_id", userId);
         if (error) {
-            throw error
-        };
+          throw error;
+        }
         setLinks(data);
         // console.log("data: ", data);
       } catch (error) {
@@ -58,10 +58,10 @@ export default function Home() {
 
   //récupérer les infos de la ligne à modifier
   const getLink = (e) => {
-    let interlude = parseFloat(e.target.id.split("-")[1])
-    setToUpdate({...links[interlude]})
-    setIsOpen(!isOpen)
-  }
+    let interlude = parseFloat(e.target.id.split("-")[1]);
+    setToUpdate({ ...links[interlude] });
+    setIsOpen(!isOpen);
+  };
 
   //ajouter un nouveau lien dans la bdd
   const addNewLInk = async () => {
@@ -77,10 +77,10 @@ export default function Home() {
           .select();
         if (error) throw error;
         if (links) {
-          setLinks([...data, ...links])
-          setTitle("")
-          setUrl("")
-        };
+          setLinks([...data, ...links]);
+          setTitle("");
+          setUrl("");
+        }
       }
     } catch (error) {
       console.error(error);
@@ -93,24 +93,30 @@ export default function Home() {
       //appel du module
       //ne pas oublier de mettre direct le nom de la table en premier paramètre
       //le second argument = le state contenant les infos à push
-      const { data, error } = await createTableElement("links", {title, url, user_id: userId})
+      const { data, error } = await createTableElement("links", {
+        title,
+        url,
+        user_id: userId,
+      });
       console.log(data);
       //dans le cadre de ce projet, récupérer tous les liens dans un autre state
       //et l'appreler ici
       //ici on garde le state links
       if (links) {
-        setLinks([data, ...links])
-        setTitle("")
-        setUrl("")
-      };
+        setLinks([data, ...links]);
+        setTitle("");
+        setUrl("");
+      }
       console.log(links);
-    } else alert("vérifiez que vous êtes connecté et que vous avez bien rempli les deux champs")
-  }
-
+    } else
+      alert(
+        "vérifiez que vous êtes connecté et que vous avez bien rempli les deux champs"
+      );
+  };
 
   //supprimer lien de la bdd
   const deleteLink = async (e) => {
-    let id = parseFloat(e.target.id.split("-")[1])
+    let id = parseFloat(e.target.id.split("-")[1]);
     try {
       console.log(links[id]);
 
@@ -128,20 +134,19 @@ export default function Home() {
   //TEST supprimer lien de la bdd
   const testDelete = async (e) => {
     //récupérer l'id fourni durant le map
-    let id = parseFloat(e.target.id.split("-")[1])
+    let id = parseFloat(e.target.id.split("-")[1]);
 
     //premier argument = nom de la table
     //deuxième argument = on récupère dans le state links l'id de l'élément que l'on souhaite supp
-      //cela servira de "tri" (si on peut appeler ça comme ça) via la fonction eq() fournie par supabase-js
-    const { data, error } = await deleteTableElement("links", links[id].id)
+    //cela servira de "tri" (si on peut appeler ça comme ça) via la fonction eq() fournie par supabase-js
+    const { data, error } = await deleteTableElement("links", links[id].id);
     // retirer l'élément du state pour synchroniser l'affichage
     setLinks(links.filter((ele) => ele !== links[id]));
-  }
-
+  };
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       <div className="flex flex-col w-full justify-center items-center mt-4">
         {isAuthenticated && (
           <>
@@ -171,7 +176,9 @@ export default function Home() {
             >
               Ajouter un nouveau lien
             </button>
-            <button onClick={testCreate} className={`${styles.button}`}>Test module CRUD</button>
+            <button onClick={testCreate} className={`${styles.button}`}>
+              Test module CRUD
+            </button>
           </>
         )}
         {links?.map((link, i) => (
@@ -185,7 +192,7 @@ export default function Home() {
             >
               <p>{link.title}</p>
             </div>
-            <div className="flex flex-row items-center" >
+            <div className="flex flex-row items-center">
               <div
                 onClick={deleteLink}
                 className="flex flex-row justify-center items-center w-fit h-fit ml-2 p-2 border border-black rounded-full cursor-pointer"
@@ -201,7 +208,7 @@ export default function Home() {
                 XXX
               </div>
               <div
-                onClick={getLink} 
+                onClick={getLink}
                 className="border border-black rounded-full ml-2 p-2 cursor-pointer"
                 id={`update-${i}`}
               >
@@ -211,7 +218,22 @@ export default function Home() {
           </div>
         ))}
       </div>
-      {isOpen ? <UpdateModal links={links} setLinks={setLinks} toUpdate={toUpdate} setToUpdate={setToUpdate} isOpen={isOpen} setIsOpen={setIsOpen} /> : null}
+      {isOpen ? (
+        <UpdateModal
+          links={links}
+          setLinks={setLinks}
+          toUpdate={toUpdate}
+          setToUpdate={setToUpdate}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+      ) : null}
+      <button
+        onClick={() => router.push("/menu")}
+        className={`${styles.button}`}
+      >
+        Menu
+      </button>
     </>
   );
 }

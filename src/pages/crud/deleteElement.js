@@ -5,15 +5,15 @@ import supabase from "../utils/supabaseClient";
 //second paramètre un objet tableWithId = number, l'id de l'élément à supprimer
 
 export default async function deleteTableElement(tableName, tableWithId) {
-    let error = {};
-    let data = {}
+  let error = {};
+  let data = {};
 
-    try {
-       data = await supabase.from(tableName).delete().eq("id", tableWithId)
-       console.log(data);
-    } catch (err) {
-        error = err
-    }
+  try {
+    data = await supabase.from(tableName).delete().eq("id", tableWithId);
+    console.log(data);
+  } catch (err) {
+    error = err;
+  }
 
-    return { data, error }
+  return { data, error };
 }
