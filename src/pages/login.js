@@ -9,29 +9,10 @@ const Login = () => {
   const [password, setPassword] = useState();
   const router = useRouter();
 
-  // const signInWithEmail = async () => {
-  //   try {
-  //     if (email && password) {
-  //       const resp = await supabase.auth.signInWithPassword({
-  //         email,
-  //         password,
-  //       });
-  //       if (resp.error) throw resp.error;
-  //       const userId = resp.data.user?.id;
-  //       console.log(resp);
-  //       // router.push("/dashboard");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   //connexion
   const handleLogin = async () => {
-    const { data, error } = await logInWithEmail(email, password)
-    if (error) console.error(error);
-    console.log(data);
-    if (!data.error) router.push('/dashboard')
+    const { error } = await logInWithEmail(email, password)
+    if (!error) router.push('/dashboard')
 
   }
 

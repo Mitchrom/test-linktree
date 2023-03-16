@@ -6,6 +6,7 @@ import supabase from "../utils/supabaseClient";
 import { styles } from "@/styles/style";
 import createTableElement from "../crud/createElement";
 import deleteTableElement from "../crud/deleteElement";
+import { getCurrentUser } from "../auth/getUsers";
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -23,15 +24,17 @@ export default function Home() {
   useEffect(() => {
     // console.log(router.asPath.split('/')[2]);
     const getUser = async () => {
-      const user = await supabase.auth.getUser();
+      // const user = await supabase.auth.getUser();
+      const user = await getCurrentUser()
+      console.log("infos user: ", user);
 
-      if (user) {
-        const userId = user.data.user?.id;
-        setIsAuthenticated(true);
-        setUserId(userId);
-      } else {
-        setIsAuthenticated(false);
-      }
+      // if (user) {
+      //   const userId = user.data.user?.id;
+      //   setIsAuthenticated(true);
+      //   setUserId(userId);
+      // } else {
+      //   setIsAuthenticated(false);
+      // }
     };
     getUser();
   }, []);

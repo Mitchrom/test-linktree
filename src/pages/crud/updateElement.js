@@ -9,20 +9,17 @@ export default async function updateTableElement(
   tableElements,
   tableElementId
 ) {
-  let data = {};
-  let error = {};
+  // let data = {};
+  // let error = {};
 
   try {
-    chat(
-      ({ data } = await supabase
-        .from(tableName)
-        .update(tableElements)
-        .match(tableElementId))
-    );
-    // console.log(data);
-  } catch (err) {
-    error = err;
+    const { data, error } = await supabase
+      .from(tableName)
+      .update(tableElements)
+      .match(tableElementId);
+    return data;
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour", error);
+    return null;
   }
-
-  return { data, error };
 }
